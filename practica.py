@@ -4,10 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# --- LÓGICA BASADA FIELMENTE EN EL PSEUDOCÓDIGO ---
 def ejecutar_metodo():
     try:
-        # Entrada: Función, aprox inicial (r0), error
         texto_f = entry_funcion.get()
         def f(x): return eval(texto_f, {"x": x, "np": np})
         def df(x): 
@@ -17,39 +15,32 @@ def ejecutar_metodo():
         r0 = float(entry_x0.get())
         error_permitido = float(entry_error.get())
         
-        # Salida: Inicializar error absoluto
         error_absoluto = 100 
         iteraciones = 0
         
         txt_resultados.delete('1.0', tk.END)
 
-        # Si iteraciones <= 30
         if iteraciones <= 30:
-            # Mientras error absoluto > error Hacer
             while error_absoluto > error_permitido and iteraciones < 30:
-                # ra = r0 - f(r0) / f'(r0)
                 ra = r0 - (f(r0) / df(r0))
                 
-                # error absoluto = |ra - r0|
                 error_absoluto = abs(ra - r0)
                 
-                # r0 = ra
                 r0 = ra
                 iteraciones += 1
                 
                 txt_resultados.insert(tk.END, f"Iter {iteraciones}: ra = {ra:.6f}\n")
             
-            # Imprimir: raíz
             txt_resultados.insert(tk.END, f"\nRaíz final: {r0:.6f}")
             dibujar_grafica(f, r0)
         else:
-            # Si no -> Imprimir: El método no converge
             txt_resultados.insert(tk.END, "El método no converge")
 
     except Exception as e:
         messagebox.showerror("Error", "Verifica la entrada (ej: usar 'x' y '*' para multiplicar)")
 
-# --- INTERFAZ ---
+        
+
 def dibujar_grafica(func_usuario, raiz):
     ax.clear()
     x_eje = np.linspace(raiz - 3, raiz + 3, 100)
@@ -67,7 +58,6 @@ ventana.configure(bg="#fdfde0")
 frame_controles = tk.Frame(ventana, bg="#fdfde0")
 frame_controles.pack(side=tk.LEFT, padx=20)
 
-# Aquí queda la etiqueta con la idea/ejemplo para el usuario
 tk.Label(frame_controles, text="Expresión f(x) (ej: x**3 - 2*x - 5):", bg="#fdfde0", font=("Arial", 10, "bold")).pack()
 entry_funcion = tk.Entry(frame_controles, width=35, font=("Arial", 11))
 entry_funcion.pack(pady=5)
